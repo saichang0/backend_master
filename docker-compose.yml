@@ -1,25 +1,25 @@
 version: '3.8'
 
 services:
-    master_backend:
+    master_backend_saichang:
         build: .
         container_name: master_backend_saichang
         restart: always
         ports:
-            - "3030:3000"                 # Host port 3000 → Container port 3000
+            - "3002:3000"                 # Host port 3000 → Container port 3000
         depends_on:
-            - db                          # Wait for 'db' container to start
+            - db_saichang                          # Wait for 'db' container to start
         env_file:
             - .env                        # Load environment variables from .env
         networks:
             - master_network               # Connect to custom network
 
     
-    db:
+    db_saichang:
         image: mysql:8.0
         container_name: master_backend_db_saichang
         ports:
-            - "3030:3306"                 # Host port 3306 → Container port 3306
+            -  "3308:3306"                  # Host port 3306 → Container port 3306
         environment:
             MYSQL_ROOT_PASSWORD: 123456    # Root password for MySQL
             MYSQL_DATABASE: master_backend # Auto-create this database
