@@ -17,7 +17,7 @@ services:
     
     db:
         image: mysql:8.0
-        container_name: master_backend_db
+        container_name: master_backend_db_saichang
         ports:
             - "3330:3306"                 # Host port 3306 → Container port 3306
         environment:
