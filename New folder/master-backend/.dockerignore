@@ -1,0 +1,20 @@
+# Ignore node_modules directory
+node_modules/
+
+# Ignore build artifacts
+build/
+
+# Ignore local environment variables
+.env
+
+# Ignore temporary files
+tmp/
+*.tmp
+
+# Ignore logs - FIXED
+logs/
+*.log
+**/*.log
+
+# Ignore DS_Store
+.DS_Store

@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+    master_backend:
+        build: .
+        container_name: master_backend
+        restart: always
+        ports:
+            - "3003:3000"                 # Host port 3000 → Container port 3000
+        depends_on:
+            - db                          # Wait for 'db' container to start
+        env_file:
+            - .env                        # Load environment variables from .env
+        networks:
+            - master_network               # Connect to custom network
+
+    
+    db:
+        image: mysql:8.0
+        container_name: master_backend_db
+        ports:
+            - "3330:3306"                 # Host port 3306 → Container port 3306
+        environment:
+            MYSQL_ROOT_PASSWORD: 123456    # Root password for MySQL
+            MYSQL_DATABASE: master_backend # Auto-create this database
+        volumes:
+            - ../db_data:/var/lib/mysql     # Persist database data locally
+        restart: unless-stopped 
+        networks:
+            - master_network               # Connect to same custom network
+
+# Custom network definition
+networks:
+    master_network:
+        driver: bridge   # Default network type for container-to-container communication
