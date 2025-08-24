@@ -1,0 +1,70 @@
+name: Deploy to Cloud (Password Auth)
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+    inputs:
+      debug_enabled:
+        description: 'Enable SSH debugging session'
+        required: false
+        default: 'false'
+        type: boolean
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup SSH debugging (if enabled)
+        if: ${{ github.event.inputs.debug_enabled == 'true' }}
+        uses: mxschmitt/action-tmate@v3
+        with:
+          limit-access-to-actor: true
+          timeout-minutes: 10
+
+      - name: Install sshpass
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y sshpass
+
+      - name: Deploy to server
+        run: |
+          HOST="${{ secrets.CLOUD_HOST }}"
+          PASS="${{ secrets.CLOUD_PASSWORD }}"
+          DEPLOY_PATH="/saichang/backend_master/"
+         
+          echo " Deploying to $HOST..."
+         
+          sshpass -p "$PASS" ssh -o StrictHostKeyChecking=no root@$HOST << EOF
+            set -e
+           
+            echo " Updating repository..."
+            cd $DEPLOY_PATH
+            git pull origin main
+           
+            echo " Stopping services..."
+            docker compose down --timeout 30
+           
+            echo " Starting services..."
+            docker compose up -d --build
+           
+            echo "⏳ Waiting for services..."
+            sleep 10
+           
+            echo "✅ Checking status..."
+            docker compose ps
+           
+            echo " Deployment complete!"
+          EOF
+
+      - name: Setup SSH debugging (on failure)
+        if: failure()
+        uses: mxschmitt/action-tmate@v3
+        with:
+          limit-access-to-actor: true
+          timeout-minutes: 15

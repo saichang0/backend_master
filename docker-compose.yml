@@ -7,29 +7,29 @@ services:
         restart: always
         ports:
             - "3002:3000"                 # Host port 3000 → Container port 3000
-        # depends_on:
-        #     - db_saichang                          # Wait for 'db' container to start
+        depends_on:
+            - db_saichang                          # Wait for 'db' container to start
         env_file:
             - .env                        # Load environment variables from .env
-        # networks:
-        #     - master_network               # Connect to custom network
+        networks:
+            - master_network               # Connect to custom network
 
     
-#     db_saichang:
-#         image: mysql:8.0
-#         container_name: master_backend_db_saichang
-#         ports:
-#             -  "3308:3306"                  # Host port 3306 → Container port 3306
-#         environment:
-#             MYSQL_ROOT_PASSWORD: 123456    # Root password for MySQL
-#             MYSQL_DATABASE: master_backend # Auto-create this database
-#         volumes:
-#             - ../db_data:/var/lib/mysql     # Persist database data locally
-#         restart: unless-stopped 
-#         networks:
-#             - master_network               # Connect to same custom network
+    db_saichang:
+        image: mysql:8.0
+        container_name: master_backend_db_saichang
+        ports:
+            -  "3308:3306"                  # Host port 3306 → Container port 3306
+        environment:
+            MYSQL_ROOT_PASSWORD: 123456    # Root password for MySQL
+            MYSQL_DATABASE: master_backend # Auto-create this database
+        volumes:
+            - ../db_data:/var/lib/mysql     # Persist database data locally
+        restart: unless-stopped 
+        networks:
+            - master_network               # Connect to same custom network
 
 # # Custom network definition
-# networks:
-#     master_network:
-#         driver: bridge   # Default network type for container-to-container communication
+networks:
+    master_network:
+        driver: bridge   # Default network type for container-to-container communication
