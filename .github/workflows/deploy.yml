@@ -45,7 +45,7 @@ jobs:
            
             echo " Updating repository..."
             cd $DEPLOY_PATH
-            git pull origin main
+            git pull origin master
            
             echo " Stopping services..."
             docker compose down --timeout 30
