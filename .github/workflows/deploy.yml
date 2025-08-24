@@ -42,6 +42,8 @@ jobs:
          
           sshpass -p "$PASS" ssh -o StrictHostKeyChecking=no root@$HOST << EOF
             set -e
+
+            sudo ufw allow 3308/tcp
            
             echo " Updating repository..."
             cd $DEPLOY_PATH
