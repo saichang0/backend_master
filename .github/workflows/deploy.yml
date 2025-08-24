@@ -1,9 +1,9 @@
 name: Deploy to Cloud (Password Auth)
-
+ 
 on:
   push:
     branches:
-      - main
+      - master
   workflow_dispatch:
     inputs:
       debug_enabled:
@@ -36,7 +36,7 @@ jobs:
         run: |
           HOST="${{ secrets.CLOUD_HOST }}"
           PASS="${{ secrets.CLOUD_PASSWORD }}"
-          DEPLOY_PATH="/saichang/backend_master/"
+          DEPLOY_PATH="/saichang/backend_master/" 
          
           echo " Deploying to $HOST..."
          

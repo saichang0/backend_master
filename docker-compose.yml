@@ -7,7 +7,7 @@ services:
         restart: always
         ports:
             - "3002:3000"                 # Host port 3000 → Container port 3000
-        depends_on:
+        depends_on: 
             - db_saichang                          # Wait for 'db' container to start
         env_file:
             - .env                        # Load environment variables from .env
